@@ -33,8 +33,8 @@ services:
     volumes:
       - /app/node_modules
       - ./client:/app
-    env_file:
-      - configs.env # configure redis
+    ports:
+      - '3000:3000'
   worker:
     build:
       dockerfile: Dockerfile.dev
