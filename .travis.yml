@@ -1,0 +1,35 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t andvod/docker-complex -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true andvod/docker-complex npm run test -- --coverage
+
+after_success:
+  - docker build -t andvod/multi-client ./client
+  - docker build -t andvod/multi-nginx ./nginx
+  - docker build -t andvod/multi-server ./server
+  - docker build -t andvod/multi-worker ./worker
+  # LogIn to docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push andvod/multi-client
+  - docker push andvod/multi-nginx
+  - docker push andvod/multi-server
+  - docker push andvod/multi-worker
+
+#deploy:
+#  provider: elasticbeanstalk
+#  region: us-west-2
+#  app: multi-docker
+#  env: MultiDocker-env
+#  bucket_name: elasticbeanstalk-us-west-2-429821646124
+#  bucket_path: docker-multi
+#  on:
+#    branch: master
+#  access_key_id: $AWS_ACCESS_KEY
+#  secret_access_key:
+#    secure: $AWS_SECRET_KEY
