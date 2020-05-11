@@ -21,23 +21,11 @@ after_success:
   - docker push andvod/multi-server
   - docker push andvod/multi-worker
 
-#deploy:
-#  provider: elasticbeanstalk
-#  region: us-west-2
-#  app: multi-docker
-#  env: MultiDocker-env
-#  bucket_name: elasticbeanstalk-us-west-2-429821646124
-#  bucket_path: docker-multi
-#  on:
-#    branch: master
-#  access_key_id: $AWS_ACCESS_KEY
-#  secret_access_key:
-#    secure: $AWS_SECRET_KEY
 deploy:
   provider: elasticbeanstalk
   region: "eu-central-1"
   app: "multi-complex"
-  env: "MultiComplex-env"
+  env: "multi-complex-env"
   bucket_name: "elasticbeanstalk-eu-central-1-800384250910"
   bucket_path: multi-complex
   on:
